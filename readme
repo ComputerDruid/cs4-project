@@ -1,0 +1,87 @@
+Dan Johnson
+
+Rationale:
+----------
+The common solver is implemented in the solver.cpp file. It takes a configuration,
+and knows to call the forward-declared is_goal and find_neighbors methods. The idea
+is that it does not have to work with the configurations directly, only calling
+helper methods provided by the puzzle-specific objects, here implemented in
+clock.cpp. The solver uses a simple Breadth-First-Search to find the nearest goal.
+Additionally, the each configuration hlds a pointer to the previous configuration,
+which allows for efficient backtracking once the goal configuration is found to
+determine the path taken. Unfortunately, this approach requires reference-counting
+to not leak memory, which is done manually here, although valgrind confirms
+that it does not leak memory.
+
+Command Line Usage:
+-------------------
+
+usage: clock hours start end
+
+Sample Run:
+-----------
+
+$ clock 24 12 1
+12
+11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+
+How to make a new puzzle:
+-------------------------
+
+include the following header files:
+#include "Configuration.h"
+#include "solver.h"
+
+implement the following 2 helper functions:
+
+///Returns true if the given configuration is a solution
+bool is_goal(const Configuration& c);
+
+///return a list of neighbor configurations to the given configuration
+list<Configuration> find_neighbors(Configuration* current);
+
+call the following method with the initial configuration.
+Configuration solve(Configuration start);
+
+optionally call the following method to print the found solution:
+void print_solution(Configuration* c);
+
+link with solver.o (the solver methods) and Configuration.o (the configuration class)
+
+Design
+======
+
+Configuration:
+--------------
+* state information
+* pointer to previous configuration (NULL if initial condition)
+* configurations are equal if states are equal (regardless of previous
+  configuation)
+
+Solver methods:
+---------------
+* is_goal(Configuration): returns if the specified configuration meets the
+  goal condition
+* find_neighbors(Configuration): returns a list of configurations next to the
+  given configuration
+* print_solution(Configuration): print the path taken to reach the specified
+  configuration
+* solve(initial configuration): returns the nearest goal configuration
+  reachable from the given initial configuration.
+
+Main (flow of control):
+-----------------------
+create initial configuration
+solve() for solution:
+	BFS using is_goal() for end condition, and find_neighbors()
+print_solution()
