@@ -45,9 +45,9 @@ bool Configuration::can_free() const {
 }
 Configuration::~Configuration() {
 	//std::cerr << "[" << _value << "] is deleted" << endl;
-	if(_prev) {
+	if (_prev) {
 		_prev->dereference();
-		if(_prev->can_free()) {
+		if (_prev->can_free()) {
 			delete _prev;
 		}
 	}

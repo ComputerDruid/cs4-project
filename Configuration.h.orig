@@ -36,7 +36,7 @@ class Configuration {
 
 		///Increment the reference counter for this configuration
 		void add_reference();
-
+		
 		///Decrement the reference counter for this configuration
 		///@pre the reference count for this configuration must not be 0
 		void dereference();
