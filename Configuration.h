@@ -4,15 +4,6 @@
 ///Stores a configuration for the puzzle
 class Configuration {
 	public:
-		///Initialize a configuration with the given value
-		///@param value the state of the configuration to be created
-		Configuration(int value);
-
-		///Initialize a configuration with the given value and parent
-		///@param value the state of the configuration to be created
-		///@param prev pointer to the previous configuration
-		Configuration(int value, Configuration* prev);
-
 		///Initialize a configuration as a copy of the given configuration
 		///@param other the configuration to copy
 		Configuration(const Configuration& other);
@@ -21,18 +12,10 @@ class Configuration {
 		~Configuration();
 
 		///Return a pointer to the previous configuration
-		Configuration* get_prev() const;
-
-		///Return the value associated with the configuration
-		int get_value() const;
-
-		///Return whether the specified configuration is equal to the current one
-		///Two configurations are equal only if their values are the same
-		///@param other the configuration to compare to
-		bool operator==(const Configuration& other) const;
+		virtual Configuration* get_prev() const;
 
 		///Output a summary of the state of the configuration on standard output
-		void display() const;
+		virtual void display() const = 0;
 
 		///Increment the reference counter for this configuration
 		void add_reference();
@@ -45,9 +28,13 @@ class Configuration {
 		///It is safe to delete the object if the reference counter is 0
 		bool can_free() const;
 
+	protected:
+		///Initialize a configuration with the given parent
+		///@param prev pointer to the previous configuration
+		Configuration(Configuration* prev);
+		Configuration();
 	private:
 		Configuration* _prev;
-		int _value;
 		int _references;
 };
 #endif //CONFIGURATION_H

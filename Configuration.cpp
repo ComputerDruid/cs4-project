@@ -6,12 +6,12 @@
 using std::cout;
 using std::endl;
 
-Configuration::Configuration(int value) : _prev(NULL), _value(value), _references(0) {}
-Configuration::Configuration(int value, Configuration* prev) : _prev(prev), _value(value), _references(0) {
+Configuration::Configuration() : _prev(NULL), _references(0) {}
+Configuration::Configuration(Configuration* prev) : _prev(prev), _references(0) {
 	//std::cerr << "[" << _value << "] references [" << _prev->get_value() << "]" << endl;
 	_prev->add_reference();
 }
-Configuration::Configuration(const Configuration& other) : _prev(other._prev), _value(other._value), _references(0) {
+Configuration::Configuration(const Configuration& other) : _prev(other._prev), _references(0) {
 	if(_prev) {
 		//std::cerr << "[" << _value << "] references [" << _prev->get_value() << "]" << endl;
 		_prev->add_reference();
@@ -19,16 +19,6 @@ Configuration::Configuration(const Configuration& other) : _prev(other._prev), _
 }
 Configuration* Configuration::get_prev() const {
 	return _prev;
-}
-int Configuration::get_value() const {
-	return _value;
-}
-bool Configuration::operator==(const Configuration& other) const {
-	return other.get_value() == get_value();
-}
-
-void Configuration::display() const {
-	cout << _value << endl;
 }
 
 void Configuration::add_reference() {
