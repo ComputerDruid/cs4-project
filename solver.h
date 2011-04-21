@@ -2,14 +2,6 @@
 #define SOLVER_H
 #include "Configuration.h"
 #include <list>
-///finds the solution starting from the given configuration using BFS
-///@param start the initial configuration to start from
-///@return the final goal configuration
-Configuration solve(const Configuration& start);
-
-///print out a trace of the solution path
-///@param c pointer to the solution configuration
-void print_solution(Configuration* c);
 
 //Implemented elsewhere:
 
@@ -17,4 +9,47 @@ void print_solution(Configuration* c);
 bool is_goal(const Configuration& c);
 ///return a list of neighbor configurations to the given configuration
 std::list<Configuration> find_neighbors(Configuration* c);
+
+//Implemented here:
+
+///finds the solution starting from the given configuration using BFS
+///@param start the initial configuration to start from
+///@return the final goal configuration
+template <typename T>
+T solve(const T& start) {
+	std::list<T*> q;
+	T* current = new T(start);
+	current->add_reference();
+	q.push_back(current);
+	while(!q.empty()) {
+		current = q.front();
+		q.pop_front();
+		if(is_goal(*current)) break;
+		std::list<T> neighbors = find_neighbors(current);
+		for(typename std::list<T>::iterator iter = neighbors.begin(); iter != neighbors.end(); iter++) {
+			T* temp = new T(*iter);
+			temp->add_reference();
+			q.push_back(temp);
+		}
+		//std::cerr << "DEBUG: Pulling one off the stack." << endl;
+		current->dereference();
+		if(current->can_free()) delete current;
+		current = NULL; //TODO: fix this
+	}
+	T result = *current;
+	//std::cerr << "DEBUG: Cleaning up." << endl;
+	delete current;
+	while(!q.empty()) {
+		current = q.front();
+		q.pop_front();
+		delete current;
+	}
+
+	return result;
+
+}
+
+///print out a trace of the solution path
+///@param c pointer to the solution configuration
+void print_solution(Configuration* c);
 #endif //SOLVER_H

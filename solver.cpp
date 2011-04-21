@@ -12,35 +12,3 @@ void print_solution(Configuration* c) {
 	c->display();
 }
 
-Configuration solve(const Configuration& start) {
-	list<Configuration*> q;
-	Configuration* current = new Configuration(start);
-	current->add_reference();
-	q.push_back(current);
-	while(!q.empty()) {
-		current = q.front();
-		q.pop_front();
-		if(is_goal(*current)) break;
-		list<Configuration> neighbors = find_neighbors(current);
-		for(list<Configuration>::iterator iter = neighbors.begin(); iter != neighbors.end(); iter++) {
-			Configuration* temp = new Configuration(*iter);
-			temp->add_reference();
-			q.push_back(temp);
-		}
-		//std::cerr << "DEBUG: Pulling one off the stack." << endl;
-		current->dereference();
-		if(current->can_free()) delete current;
-		current = NULL; //TODO: fix this
-	}
-	Configuration result = *current;
-	//std::cerr << "DEBUG: Cleaning up." << endl;
-	delete current;
-	while(!q.empty()) {
-		current = q.front();
-		q.pop_front();
-		delete current;
-	}
-
-	return result;
-
-}
