@@ -17,6 +17,7 @@ Command Line Usage:
 -------------------
 
 usage: clock hours start end
+usage: water goal_value bucket1 ...
 
 Sample Run:
 -----------
@@ -35,23 +36,28 @@ $ clock 24 12 1
 2
 1
 
+$ water 5 3 4
+
 How to make a new puzzle:
 -------------------------
+
+Inherit from the Configuration class, being sure to be able to store your own state
+and display it when prompted via display()
 
 include the following header files:
 #include "Configuration.h"
 #include "solver.h"
 
-implement the following 2 helper functions:
+implement the following 2 helper functions (where PuzzleConf is your subclass of Configuration):
 
 ///Returns true if the given configuration is a solution
-bool is_goal(const Configuration& c);
+bool is_goal(const PuzzleConf& c);
 
 ///return a list of neighbor configurations to the given configuration
-list<Configuration> find_neighbors(Configuration* current);
+list<PuzzleConf> find_neighbors(PuzzleConf* current);
 
 call the following method with the initial configuration.
-Configuration solve(Configuration start);
+PuzzleConf solve<PuzzleConf>(PuzzleConf start);
 
 optionally call the following method to print the found solution:
 void print_solution(Configuration* c);
@@ -63,21 +69,22 @@ Design
 
 Configuration:
 --------------
-* state information
+* state information (in subclass)
 * pointer to previous configuration (NULL if initial condition)
 * configurations are equal if states are equal (regardless of previous
   configuation)
 
 Solver methods:
 ---------------
-* is_goal(Configuration): returns if the specified configuration meets the
+* is_goal(Configuration subclass): returns if the specified configuration meets the
   goal condition
-* find_neighbors(Configuration): returns a list of configurations next to the
+* find_neighbors(Configuration subclass): returns a list of configurations next to the
   given configuration
 * print_solution(Configuration): print the path taken to reach the specified
   configuration
 * solve(initial configuration): returns the nearest goal configuration
-  reachable from the given initial configuration.
+  reachable from the given initial configuration. Is a templated function to be
+  able to properly handle callbacks for varios types of configurations.
 
 Main (flow of control):
 -----------------------
