@@ -49,6 +49,10 @@ class WaterConf : public Configuration {//extends Configuration
 		///@param other the configuration to compare to
 		bool operator==(const WaterConf& other) const;
 
+		///Return whether the specified configuration is less than the current one
+		///@param other the configuration to compare to
+		bool operator<(const WaterConf& other) const;
+
 	private:
         ///Whether or not this is a valid config
 		bool _empty;

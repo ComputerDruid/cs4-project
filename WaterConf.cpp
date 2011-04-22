@@ -23,6 +23,18 @@ void WaterConf::display() const {
 bool WaterConf::operator==(const WaterConf& other) const {
 	return other.get_values() == get_values();
 }
+bool WaterConf::operator<(const WaterConf& other) const {
+	std::vector<int> otherv = other.get_values();
+	if (otherv.size() != _values.size()) return _values.size() < otherv.size();
+	std::vector<int>::const_iterator it2 = otherv.begin();
+	for (std::vector<int>::const_iterator it = _values.begin(); it != _values.end(); ++it) {
+		if (*it2 != *it) {
+			return *it < *it2; //they differ here, which one is less?
+		}
+		++it2;
+	}
+	return false; //equal
+}
 std::vector<int> WaterConf::get_values() const {
 	return _values;
 }
