@@ -31,7 +31,7 @@ T solve(const T& start) {
 		std::list<T> neighbors = find_neighbors(current);
 		for(typename std::list<T>::iterator iter = neighbors.begin(); iter != neighbors.end(); iter++) {
 			T* temp = new T(*iter);
-			if (visited.find(*temp) != visited.end()) {
+			if(visited.find(*temp) != visited.end()) {
 				delete temp;
 			}
 			else {
@@ -45,7 +45,7 @@ T solve(const T& start) {
 		if(current->can_free()) delete current;
 		current = NULL;
 	}
-	if (!current) {
+	if(!current) {
 		return T();
 	}
 	T result = *current;

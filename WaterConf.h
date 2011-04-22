@@ -16,7 +16,7 @@
 class WaterConf : public Configuration {//extends Configuration
 	public:
 
-        ///Create a default configuration
+		///Create a default configuration
 		WaterConf();
 
 		///Initialize a configuration with the given value
@@ -54,7 +54,7 @@ class WaterConf : public Configuration {//extends Configuration
 		bool operator<(const WaterConf& other) const;
 
 	private:
-        ///Whether or not this is a valid config
+		///Whether or not this is a valid config
 		bool _empty;
 		///all the buckets in this config
 		std::vector<int> _values;

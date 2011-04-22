@@ -35,12 +35,12 @@ int read_configuration(int argc, char** argv, std::vector<int>& size, int& end) 
 		return 1;
 	}
 	end = atoi(argv[1]);
-	if (end < 0) {
+	if(end < 0) {
 		return 2;
 	}
-	for( int x = 2; x < argc; ++x ) {
+	for(int x = 2; x < argc; ++x) {
 		int s = atoi(argv[x]);
-		if (s < 0) {
+		if(s < 0) {
 			return 2;
 		}
 		size.push_back(s);
@@ -52,13 +52,13 @@ int read_configuration(int argc, char** argv, std::vector<int>& size, int& end) 
 ///@param argc number of arguments
 ///@param argv list of arguments
 int main(int argc, char** argv) {
-	WaterConf start(std::vector<int>(argc-2, 0));
+	WaterConf start(std::vector<int>(argc - 2, 0));
 	int rc = read_configuration(argc, argv, SIZES, end);
 	if(rc == 1) {
 		cout << "usage: " << argv[0] << " hours start end" << endl;
 		return rc;
 	}
-	else if (rc==2) {
+	else if(rc == 2) {
 		cout << "All arguments must be nonnegative" << endl;
 		return rc;
 	}
@@ -109,8 +109,8 @@ WaterConf empty(WaterConf* current, int bucket) {
 ///@return a neighbor config
 WaterConf pour_into(WaterConf* current, int from, int to) {
 	std::vector<int> v(current->get_values());
-	v.at(to) = v.at(to)+v.at(from);
-	if (v.at(to) > SIZES.at(to)) {
+	v.at(to) = v.at(to) + v.at(from);
+	if(v.at(to) > SIZES.at(to)) {
 		v.at(from) =  v.at(to) - SIZES.at(to);
 		v.at(to) = SIZES.at(to);
 	}
@@ -127,11 +127,11 @@ list<WaterConf> find_neighbors(WaterConf* current) {
 	//cout << "Searching " << current << endl;
 	list<WaterConf> l;
 
-	for (int x = 0; x < SIZES.size(); ++x) {
+	for(int x = 0; x < SIZES.size(); ++x) {
 		l.push_back(fill(current, x));
 		l.push_back(empty(current, x));
-		for (int y = 0; y < SIZES.size(); ++y) {
-			if ( x != y ) {
+		for(int y = 0; y < SIZES.size(); ++y) {
+			if(x != y) {
 				l.push_back(pour_into(current, x, y));
 			}
 		}

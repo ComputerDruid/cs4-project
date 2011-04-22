@@ -26,7 +26,7 @@ class ClockConf : public Configuration {
 
 		///Return a pointer to the previous configuration
 		virtual ClockConf* get_prev() const;
-		
+
 		///Output a summary of the state of the configuration on standard output
 		virtual void display() const;
 
