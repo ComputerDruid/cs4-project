@@ -16,7 +16,8 @@ void ClockConf::display() const {
 	cout << _value << endl;
 }
 bool ClockConf::operator==(const ClockConf& other) const {
-	return other.get_value() == get_value();
+
+	return (_empty && other._empty) || other.get_value() == get_value();
 }
 bool ClockConf::operator<(const ClockConf& other) const {
 	return other.get_value() > get_value();
