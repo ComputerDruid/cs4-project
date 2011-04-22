@@ -42,6 +42,10 @@ int main(int argc, char** argv) {
 	}
 	else {
 		ClockConf solution = solve(start);
+		if(solution == ClockConf()) {
+			std::cerr << "No solution" << endl;
+			return 1337;
+		}
 		print_solution(&solution);
 	}
 	return 0;

@@ -5,6 +5,9 @@
 ///Stores a configuration for the puzzle
 class ClockConf : public Configuration {
 	public:
+		///Initialize an empty configuration
+		ClockConf();
+
 		///Initialize a configuration with the given value
 		///@param value the state of the configuration to be created
 		ClockConf(int value);
@@ -35,7 +38,12 @@ class ClockConf : public Configuration {
 		///@param other the configuration to compare to
 		bool operator==(const ClockConf& other) const;
 
+		///Return whether the specified configuration is less than the current one
+		///@param other the configuration to compare to
+		bool operator<(const ClockConf& other) const;
+
 	private:
 		int _value;
+		bool _empty;
 };
 #endif //CLOCKCONF_H

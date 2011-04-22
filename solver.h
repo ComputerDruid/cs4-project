@@ -2,6 +2,8 @@
 #define SOLVER_H
 #include "Configuration.h"
 #include <list>
+#include <set>
+#include <iostream>
 
 //Implemented elsewhere:
 
@@ -18,6 +20,7 @@ std::list<Configuration> find_neighbors(Configuration* c);
 template <typename T>
 T solve(const T& start) {
 	std::list<T*> q;
+	std::set<T> visited;
 	T* current = new T(start);
 	current->add_reference();
 	q.push_back(current);
@@ -28,13 +31,22 @@ T solve(const T& start) {
 		std::list<T> neighbors = find_neighbors(current);
 		for(typename std::list<T>::iterator iter = neighbors.begin(); iter != neighbors.end(); iter++) {
 			T* temp = new T(*iter);
-			temp->add_reference();
-			q.push_back(temp);
+			if (visited.find(*temp) != visited.end()) {
+				delete temp;
+			}
+			else {
+				visited.insert(*temp);
+				temp->add_reference();
+				q.push_back(temp);
+			}
 		}
 		//std::cerr << "DEBUG: Pulling one off the stack." << endl;
 		current->dereference();
 		if(current->can_free()) delete current;
-		current = NULL; //TODO: fix this
+		current = NULL;
+	}
+	if (!current) {
+		return T();
 	}
 	T result = *current;
 	//std::cerr << "DEBUG: Cleaning up." << endl;
