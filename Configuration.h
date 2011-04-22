@@ -9,7 +9,7 @@ class Configuration {
 		Configuration(const Configuration& other);
 
 		///Clean up the configuration
-		~Configuration();
+		virtual ~Configuration();
 
 		///Return a pointer to the previous configuration
 		virtual Configuration* get_prev() const;
