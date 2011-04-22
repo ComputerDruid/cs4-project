@@ -21,9 +21,6 @@ class ClockConf : public Configuration {
 		///@param other the configuration to copy
 		ClockConf(const ClockConf& other);
 
-		///Clean up the configuration
-		//~ClockConf();
-
 		///Return a pointer to the previous configuration
 		virtual ClockConf* get_prev() const;
 

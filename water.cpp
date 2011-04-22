@@ -78,7 +78,6 @@ int main(int argc, char** argv) {
 ///@return true if c is a solution, false otherwise
 bool is_goal(const WaterConf& c) {
 	std::vector<int> a = c.get_values();
-	//return (find(c.get_values().begin(), c.get_values().end(), end) != c.get_values().end());
 	return (find(a.begin(), a.end(), end) != a.end());
 }
 
@@ -124,7 +123,6 @@ WaterConf pour_into(WaterConf* current, int from, int to) {
 ///@param current a configuration
 ///@return a list of a config's "neighbor" configs
 list<WaterConf> find_neighbors(WaterConf* current) {
-	//cout << "Searching " << current << endl;
 	list<WaterConf> l;
 
 	for(int x = 0; x < SIZES.size(); ++x) {

@@ -56,7 +56,6 @@ bool is_goal(const ClockConf& c) {
 }
 
 list<ClockConf> find_neighbors(ClockConf* current) {
-	//cout << "Searching " << current << endl;
 	list<ClockConf> l;
 	ClockConf back((current->get_value() - 2 + NUM_HOURS) % NUM_HOURS + 1, current);
 	ClockConf front((current->get_value() + NUM_HOURS) % NUM_HOURS + 1, current);

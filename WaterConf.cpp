@@ -14,7 +14,6 @@ WaterConf* WaterConf::get_prev() const {
 }
 
 void WaterConf::display() const {
-	//cout << _values << endl;
 	cout << "[";
 	for(int i = 0; i < _values.size() - 1; i++)
 		cout << _values.at(i) << " ";

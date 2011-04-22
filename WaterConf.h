@@ -32,9 +32,6 @@ class WaterConf : public Configuration {//extends Configuration
 		///@param other the configuration to copy
 		WaterConf(const WaterConf& other);
 
-		///Clean up the configuration
-		//~WaterConf();
-
 		///Return a pointer to the previous configuration
 		virtual WaterConf* get_prev() const;
 
