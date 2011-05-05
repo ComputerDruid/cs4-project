@@ -51,6 +51,7 @@ int read_configuration(int argc, char** argv, std::vector<int>& size, int& end) 
 	return 0;
 }
 
+void print_jam_solution(JamConf* c);
 ///Main function
 ///@param argc number of arguments
 ///@param argv list of arguments
@@ -76,7 +77,7 @@ int main(int argc, char** argv) {
 		cerr << "No solution" << endl;
 		return 1337;
 	}
-	print_solution(&solution);
+	print_jam_solution(&solution);
 	return 0;
 }
 
@@ -170,4 +171,43 @@ list<JamConf> find_neighbors(JamConf* current) {
 	}
 
 	return l;
+}
+
+void display_grid(JamConf* conf) {
+	vector<vector<char> > grid = vector<vector<char> >(grid_height, vector<char>(grid_width,' '));
+	vector<int> a = conf->get_values();
+	int r, c;
+	for (int i = 0; i < a.size(); i++) {
+		if(car_orientation[i] == ORIENTATION_VERTICAL) {
+			c = car_slots[i];
+			for (r = a[i]; r < a[i] + car_lengths[i]; ++r) {
+				grid[r][c] = 'A' + i;
+			}
+		}
+		else {
+			r = car_slots[i];
+			for (c = a[i]; c < a[i] + car_lengths[i]; ++c) {
+				grid[r][c] = 'A' + i;
+			}
+		}
+	}
+	for (r = 0; r < grid_height; ++r) {
+		for (c = 0; c < grid_width; ++c) {
+			//grid[r][c] = 'A' + r*grid_width+c;
+			cout << grid[r][c];
+		}
+		cout << endl;
+	}
+}
+int print_jam_solution_h(JamConf* c, int depth) {
+	//cout << "Configuration at " << c << endl;
+	if(!c) return depth;
+	int max_depth = print_jam_solution_h(c->get_prev(), depth + 1);
+	cout << "Step " << max_depth - depth << ":" << endl;
+	display_grid(c);
+	return max_depth;
+}
+
+void print_jam_solution(JamConf* c) {
+	print_jam_solution_h(c, 1);
 }

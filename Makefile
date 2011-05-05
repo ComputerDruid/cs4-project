@@ -1,7 +1,7 @@
 CXXFLAGS=-ggdb
 WATEROBJECTS=water.o Configuration.o solver.o WaterConf.o
 CLOCKOBJECTS=clock.o Configuration.o solver.o ClockConf.o
-JAMOBJECTS=jam.o Configuration.o solver.o JamConf.o
+JAMOBJECTS=jam.o Configuration.o JamConf.o
 TARGETS=water clock jam
 all: $(TARGETS)
 clock: $(CLOCKOBJECTS)
