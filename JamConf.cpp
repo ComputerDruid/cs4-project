@@ -15,9 +15,12 @@ JamConf* JamConf::get_prev() const {
 
 void JamConf::display() const {
 	cout << "[";
-	for(int i = 0; i < _values.size() - 1; i++)
-		cout << _values.at(i) << " ";
-	cout << _values.at(_values.size() - 1) << "]" << endl;
+	if(_values.size() > 0) {
+		for(int i = 0; i < _values.size() - 1; i++)
+			cout << _values.at(i) << " ";
+		cout << _values.at(_values.size() - 1) ;
+	}
+	cout << "]" << endl;
 }
 bool JamConf::operator==(const JamConf& other) const {
 	return other.get_values() == get_values();
