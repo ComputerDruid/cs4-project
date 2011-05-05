@@ -1,6 +1,7 @@
 WATEROBJECTS=water.o Configuration.o solver.o WaterConf.o
 CLOCKOBJECTS=clock.o Configuration.o solver.o ClockConf.o
-all: water clock
+TARGETS=water clock
+all: $(TARGETS)
 clock: $(CLOCKOBJECTS)
 	g++ -o clock $(CLOCKOBJECTS)
 water: $(WATEROBJECTS)
@@ -11,3 +12,5 @@ Configuration.o: Configuration.h
 solver.o: solver.h Configuration.h
 ClockConf.o: ClockConf.h Configuration.h
 WaterConf.o: WaterConf.h Configuration.h
+clean:
+	$(RM) *.o $(TARGETS)
