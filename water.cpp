@@ -52,7 +52,6 @@ int read_configuration(int argc, char** argv, std::vector<int>& size, int& end) 
 ///@param argc number of arguments
 ///@param argv list of arguments
 int main(int argc, char** argv) {
-	WaterConf start(std::vector<int>(argc - 2, 0));
 	int rc = read_configuration(argc, argv, SIZES, end);
 	if(rc == 1) {
 		cout << "usage: " << argv[0] << " hours start end" << endl;
@@ -63,6 +62,7 @@ int main(int argc, char** argv) {
 		return rc;
 	}
 	else {
+		WaterConf start(std::vector<int>(argc - 2, 0));
 		WaterConf solution = solve(start);
 		if(solution == WaterConf()) {
 			cerr << "No solution" << endl;
