@@ -17,6 +17,10 @@ class Configuration {
 		///Output a summary of the state of the configuration on standard output
 		virtual void display() const = 0;
 
+		///Copies the specified configuration
+		///@param other the configuration to copy
+		Configuration& operator=(const Configuration& other);
+
 		///Increment the reference counter for this configuration
 		void add_reference();
 

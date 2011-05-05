@@ -19,6 +19,11 @@ Configuration* Configuration::get_prev() const {
 	return _prev;
 }
 
+Configuration& Configuration::operator=(const Configuration& other) {
+	_prev = other._prev;
+	if(_prev) _prev->add_reference();
+}
+
 void Configuration::add_reference() {
 	_references++;
 }
