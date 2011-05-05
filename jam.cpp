@@ -166,6 +166,7 @@ list<JamConf> find_neighbors(JamConf* current) {
 				temp.display();
 			}
 		}
+		v[x]=pos; //put v[x] back
 	}
 
 	return l;
