@@ -20,7 +20,11 @@ Command Line Usage:
 -------------------
 
 usage: clock hours start end
+
 usage: water goal_value bucket1 ...
+
+usage: ./jam input output
+use "-" for standard input or output
 
 Sample Run:
 -----------
@@ -45,6 +49,24 @@ Step 2: [4 0]
 Step 3: [0 4]
 Step 4: [4 4]
 Step 5: [3 5]
+
+$ jam jam1.in -
+Step 1:
+ BB
+  A
+CCA
+Step 2:
+BB 
+  A
+CCA
+Step 3:
+BBA
+  A
+CC 
+Step 4:
+BBA
+  A
+ CC
 
 How to make a new puzzle:
 -------------------------

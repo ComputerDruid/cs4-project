@@ -42,16 +42,17 @@ int grid_height = 3;
 ///@param argv list of arguments
 ///@param size sizes of buckets
 ///@param end  win condition
-int read_configuration(int argc, char** argv, std::vector<int>& pos ) {
-	if (argc != 3) {
+int read_configuration(int argc, char** argv, std::vector<int>& pos) {
+	if(argc != 3) {
 		return 1;
 	}
 	istream *isp;
 	ifstream ifs;
 
-	if (argv[1][0] == '-' && argv[1][1] == '\0') {
+	if(argv[1][0] == '-' && argv[1][1] == '\0') {
 		isp = &std::cin;
-	} else {
+	}
+	else {
 		ifs.open(argv[1]);
 		isp = &ifs;
 	}
@@ -59,46 +60,46 @@ int read_configuration(int argc, char** argv, std::vector<int>& pos ) {
 
 
 	int num;
-	if ( ! (is >> grid_width) ) {
+	if(!(is >> grid_width)) {
 		return 2;
 	}
-	if ( ! (is >> grid_height) ) {
+	if(!(is >> grid_height)) {
 		return 2;
 	}
-	if ( !( is >> num) ) {
+	if(!(is >> num)) {
 		return 2;
 	}
-	if ( num > 25 ) return 4;
+	if(num > 25) return 4;
 	car_lengths = vector<int>(num);
 	car_slots = vector<int>(num);
 	car_orientation = vector<bool>(num, ORIENTATION_VERTICAL);
 	pos = vector<int>(num);
-	for (int car = 0; car < num; ++car) {
+	for(int car = 0; car < num; ++car) {
 		int x1, y1, x2, y2;
-		if ( ! (is >> x1)) {
+		if(!(is >> x1)) {
 			return 2;
 		}
-		if ( ! (is >> y1)) {
+		if(!(is >> y1)) {
 			return 2;
 		}
-		if ( ! (is >> x2)) {
+		if(!(is >> x2)) {
 			return 2;
 		}
-		if ( ! (is >> y2)) {
+		if(!(is >> y2)) {
 			return 2;
 		}
-		if (x1 == x2) {
+		if(x1 == x2) {
 			if(y1 == y2) return 3;
 			car_orientation[car] = ORIENTATION_VERTICAL;
 			car_slots[car] = x1; //=x2
-			car_lengths[car] = abs(y2-y1) + 1;
-			pos[car] = min(y1,y2);
+			car_lengths[car] = abs(y2 - y1) + 1;
+			pos[car] = min(y1, y2);
 		}
-		else if (y1 == y2) {
+		else if(y1 == y2) {
 			car_orientation[car] = ORIENTATION_HORIZONTAL;
 			car_slots[car] = y1; //=y2
-			car_lengths[car] = abs(x2-x1) + 1;
-			pos[car] = min(x1,x2);
+			car_lengths[car] = abs(x2 - x1) + 1;
+			pos[car] = min(x1, x2);
 		}
 		else {
 			return 3;
@@ -111,9 +112,10 @@ ofstream* ofs = new ofstream();
 ostream& get_ostream(char* sink) {
 	ostream *osp;
 
-	if (sink[0] == '-' && sink[1] == '\0') {
+	if(sink[0] == '-' && sink[1] == '\0') {
 		osp = &std::cout;
-	} else {
+	}
+	else {
 		ofs->open(sink);
 		osp = ofs;
 	}
@@ -137,7 +139,7 @@ int main(int argc, char** argv) {
 		cerr << "Error reading input" << endl;
 		return rc;
 	}
-	else if(rc == 3){
+	else if(rc == 3) {
 		cerr << "Invalid car in the input" << endl;
 		return rc;
 	}
@@ -166,7 +168,7 @@ int main(int argc, char** argv) {
 ///@return true if c is a solution, false otherwise
 bool is_goal(const JamConf& c) {
 	vector<int> a = c.get_values();
-	if (car_orientation[car_orientation.size()-1] == ORIENTATION_HORIZONTAL) {
+	if(car_orientation[car_orientation.size()-1] == ORIENTATION_HORIZONTAL) {
 		return a[car_orientation.size()-1] + car_lengths[car_orientation.size()-1] == grid_width;
 	}
 	else {
@@ -176,8 +178,8 @@ bool is_goal(const JamConf& c) {
 
 bool collides(const JamConf& conf, int i1, int i2) {
 	vector<int> v = conf.get_values();
-	if ( car_orientation[i1] == car_orientation[i2] ) {
-		if (car_slots[i1] != car_slots[i2]) return false;
+	if(car_orientation[i1] == car_orientation[i2]) {
+		if(car_slots[i1] != car_slots[i2]) return false;
 		return ((v.at(i1) >= v.at(i2)) && (v.at(i1) < v.at(i2) + car_lengths[i2]) ||
 		        (v.at(i2) >= v.at(i1)) && (v.at(i2) < v.at(i1) + car_lengths[i1]));
 	}
@@ -185,7 +187,7 @@ bool collides(const JamConf& conf, int i1, int i2) {
 		return ((car_slots[i1] >= v.at(i2)) && (car_slots[i1] < v.at(i2) + car_lengths[i2]) &&
 		        (car_slots[i2] >= v.at(i1)) && (car_slots[i2] < v.at(i1) + car_lengths[i1]));
 	}
-		
+
 }
 
 ///Returns the "neighbor" configs of a particular config
@@ -198,13 +200,13 @@ list<JamConf> find_neighbors(JamConf* current) {
 	bool safe;
 	for(int x = 0; x < v.size(); ++x) {
 		int pos = v[x];
-		if (pos - 1 >= 0) {
+		if(pos - 1 >= 0) {
 			v[x] = pos - 1;
 			temp = JamConf(v, current);
 			safe = true;
-			for (int y = 0; y < v.size(); ++y) {
-				if (y != x) {
-					if (collides(temp, x, y)) safe = false;
+			for(int y = 0; y < v.size(); ++y) {
+				if(y != x) {
+					if(collides(temp, x, y)) safe = false;
 				}
 			}
 			if(safe) {
@@ -212,51 +214,51 @@ list<JamConf> find_neighbors(JamConf* current) {
 			}
 		}
 		int size;
-		if (car_orientation[x] == ORIENTATION_VERTICAL) {
+		if(car_orientation[x] == ORIENTATION_VERTICAL) {
 			size = grid_height;
 		}
 		else {
 			size = grid_width;
 		}
-		if (pos + 1 + car_lengths[x] <= size) {
+		if(pos + 1 + car_lengths[x] <= size) {
 			v[x] = pos + 1;
 			temp = JamConf(v, current);
 			safe = true;
-			for (int y = 0; y < v.size(); ++y) {
-				if (y != x) {
-					if (collides(temp, x, y)) safe = false;
+			for(int y = 0; y < v.size(); ++y) {
+				if(y != x) {
+					if(collides(temp, x, y)) safe = false;
 				}
 			}
 			if(safe) {
 				l.push_back(temp);
 			}
 		}
-		v[x]=pos; //put v[x] back
+		v[x] = pos; //put v[x] back
 	}
 
 	return l;
 }
 
 void display_grid(JamConf* conf, ostream& out) {
-	vector<vector<char> > grid = vector<vector<char> >(grid_height, vector<char>(grid_width,' '));
+	vector<vector<char> > grid = vector<vector<char> >(grid_height, vector<char>(grid_width, ' '));
 	vector<int> a = conf->get_values();
 	int r, c;
-	for (int i = 0; i < a.size(); i++) {
+	for(int i = 0; i < a.size(); i++) {
 		if(car_orientation[i] == ORIENTATION_VERTICAL) {
 			c = car_slots[i];
-			for (r = a[i]; r < a[i] + car_lengths[i]; ++r) {
+			for(r = a[i]; r < a[i] + car_lengths[i]; ++r) {
 				grid[r][c] = 'A' + i;
 			}
 		}
 		else {
 			r = car_slots[i];
-			for (c = a[i]; c < a[i] + car_lengths[i]; ++c) {
+			for(c = a[i]; c < a[i] + car_lengths[i]; ++c) {
 				grid[r][c] = 'A' + i;
 			}
 		}
 	}
-	for (r = 0; r < grid_height; ++r) {
-		for (c = 0; c < grid_width; ++c) {
+	for(r = 0; r < grid_height; ++r) {
+		for(c = 0; c < grid_width; ++c) {
 			//grid[r][c] = 'A' + r*grid_width+c;
 			out << grid[r][c];
 		}
