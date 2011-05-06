@@ -68,6 +68,7 @@ int read_configuration(int argc, char** argv, std::vector<int>& pos ) {
 	if ( !( is >> num) ) {
 		return 2;
 	}
+	if ( num > 25 ) return 4;
 	car_lengths = vector<int>(num);
 	car_slots = vector<int>(num);
 	car_orientation = vector<bool>(num, ORIENTATION_VERTICAL);
@@ -87,6 +88,7 @@ int read_configuration(int argc, char** argv, std::vector<int>& pos ) {
 			return 2;
 		}
 		if (x1 == x2) {
+			if(y1 == y2) return 3;
 			car_orientation[car] = ORIENTATION_VERTICAL;
 			car_slots[car] = x1; //=x2
 			car_lengths[car] = abs(y2-y1) + 1;
@@ -137,6 +139,10 @@ int main(int argc, char** argv) {
 	}
 	else if(rc == 3){
 		cerr << "Invalid car in the input" << endl;
+		return rc;
+	}
+	else if(rc == 4) {
+		cerr << "Too many cars in input" << endl;
 		return rc;
 	}
 
