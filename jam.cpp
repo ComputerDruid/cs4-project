@@ -127,7 +127,8 @@ int main(int argc, char** argv) {
 	vector<int> pos;
 	int rc = read_configuration(argc, argv, pos);
 	if(rc == 1) {
-		cerr << "usage: " << argv[0] << " hours start end" << endl;
+		cerr << "usage: " << argv[0] << " input output" << endl;
+		cerr << "use \"-\" for standard input or output" << endl;
 		return rc;
 	}
 	else if(rc == 2) {
