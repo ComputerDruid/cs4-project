@@ -20,6 +20,13 @@ Configuration* Configuration::get_prev() const {
 }
 
 Configuration& Configuration::operator=(const Configuration& other) {
+	if(this == &other) return *this;
+	if(_prev) {
+		_prev->dereference();
+		if(_prev->can_free()) {
+			delete _prev;
+		}
+	}
 	_prev = other._prev;
 	if(_prev) _prev->add_reference();
 }
