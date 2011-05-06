@@ -12,12 +12,21 @@
 #include <iostream>
 #include <algorithm>
 
+#include <istream>
+#include <ostream>
+#include <fstream>
+
 using std::atoi;
-using std::cout;
+//using std::cout;
 using std::cerr;
 using std::endl;
 using std::list;
 using std::vector;
+using std::ostream;
+using std::istream;
+using std::ifstream;
+using std::ofstream;
+using std::min;
 
 const int ORIENTATION_VERTICAL = false;
 const int ORIENTATION_HORIZONTAL = true;
@@ -33,51 +42,115 @@ int grid_height = 3;
 ///@param argv list of arguments
 ///@param size sizes of buckets
 ///@param end  win condition
-int read_configuration(int argc, char** argv, std::vector<int>& size, int& end) {
-	if(argc < 3) {
+int read_configuration(int argc, char** argv, std::vector<int>& pos ) {
+	if (argc != 3) {
 		return 1;
 	}
-	end = atoi(argv[1]);
-	if(end < 0) {
+	istream *isp;
+	ifstream ifs;
+
+	if (argv[1][0] == '-' && argv[1][1] == '\0') {
+		isp = &std::cin;
+	} else {
+		ifs.open(argv[1]);
+		isp = &ifs;
+	}
+	istream &is = *isp;
+
+
+	int num;
+	if ( ! (is >> grid_width) ) {
 		return 2;
 	}
-	for(int x = 2; x < argc; ++x) {
-		int s = atoi(argv[x]);
-		if(s < 0) {
+	if ( ! (is >> grid_height) ) {
+		return 2;
+	}
+	if ( !( is >> num) ) {
+		return 2;
+	}
+	car_lengths = vector<int>(num);
+	car_slots = vector<int>(num);
+	car_orientation = vector<bool>(num, ORIENTATION_VERTICAL);
+	pos = vector<int>(num);
+	for (int car = 0; car < num; ++car) {
+		int x1, y1, x2, y2;
+		if ( ! (is >> x1)) {
 			return 2;
 		}
-		size.push_back(s);
+		if ( ! (is >> y1)) {
+			return 2;
+		}
+		if ( ! (is >> x2)) {
+			return 2;
+		}
+		if ( ! (is >> y2)) {
+			return 2;
+		}
+		if (x1 == x2) {
+			car_orientation[car] = ORIENTATION_VERTICAL;
+			car_slots[car] = x1; //=x2
+			car_lengths[car] = abs(y2-y1) + 1;
+			pos[car] = min(y1,y2);
+		}
+		else if (y1 == y2) {
+			car_orientation[car] = ORIENTATION_HORIZONTAL;
+			car_slots[car] = y1; //=y2
+			car_lengths[car] = abs(x2-x1) + 1;
+			pos[car] = min(x1,x2);
+		}
+		else {
+			return 3;
+		}
 	}
 	return 0;
 }
 
-void print_jam_solution(JamConf* c);
+ofstream* ofs = new ofstream();
+ostream& get_ostream(char* sink) {
+	ostream *osp;
+
+	if (sink[0] == '-' && sink[1] == '\0') {
+		osp = &std::cout;
+	} else {
+		ofs->open(sink);
+		osp = ofs;
+	}
+
+	return *osp;
+}
+
+void print_jam_solution(JamConf* c, ostream& out);
 ///Main function
 ///@param argc number of arguments
 ///@param argv list of arguments
 int main(int argc, char** argv) {
-	//int rc = read_configuration(argc, argv, SIZES, end);
-	//if(rc == 1) {
-	//	cout << "usage: " << argv[0] << " hours start end" << endl;
-	//	return rc;
-	//}
-	//else if(rc == 2) {
-	//	cout << "All arguments must be nonnegative" << endl;
-	//	return rc;
-	//}
-	//else {
-	//}
-	vector<int> pos = vector<int>(3, 0);
-	pos[0] = 1; car_orientation[0] = ORIENTATION_VERTICAL; car_lengths[0] = 2; car_slots[0] = 2;
-	pos[1] = 1; car_orientation[1] = ORIENTATION_HORIZONTAL; car_lengths[1] = 2; car_slots[1] = 0;
-	pos[2] = 0; car_orientation[2] = ORIENTATION_HORIZONTAL; car_lengths[2] = 2; car_slots[2] = 2;
+	vector<int> pos;
+	int rc = read_configuration(argc, argv, pos);
+	if(rc == 1) {
+		cerr << "usage: " << argv[0] << " hours start end" << endl;
+		return rc;
+	}
+	else if(rc == 2) {
+		cerr << "Error reading input" << endl;
+		return rc;
+	}
+	else if(rc == 3){
+		cerr << "Invalid car in the input" << endl;
+		return rc;
+	}
+
+	ostream& out = get_ostream(argv[2]);
+	//pos[0] = 1; car_orientation[0] = ORIENTATION_VERTICAL; car_lengths[0] = 2; car_slots[0] = 2;
+	//pos[1] = 1; car_orientation[1] = ORIENTATION_HORIZONTAL; car_lengths[1] = 2; car_slots[1] = 0;
+	//pos[2] = 0; car_orientation[2] = ORIENTATION_HORIZONTAL; car_lengths[2] = 2; car_slots[2] = 2;
 	JamConf start(pos);
 	JamConf solution = solve(start);
 	if(solution == JamConf()) {
-		cerr << "No solution" << endl;
+		out << "No solution" << endl;
 		return 1337;
 	}
-	print_jam_solution(&solution);
+	print_jam_solution(&solution, out);
+	delete ofs;
 	return 0;
 }
 
@@ -121,8 +194,6 @@ list<JamConf> find_neighbors(JamConf* current) {
 		if (pos - 1 >= 0) {
 			v[x] = pos - 1;
 			temp = JamConf(v, current);
-			cout << "=Considering ";
-			temp.display();
 			safe = true;
 			for (int y = 0; y < v.size(); ++y) {
 				if (y != x) {
@@ -130,13 +201,7 @@ list<JamConf> find_neighbors(JamConf* current) {
 				}
 			}
 			if(safe) {
-				cout << "=Accepted ";
-				temp.display();
 				l.push_back(temp);
-			}
-			else {
-				cout << "=Rejected ";
-				temp.display();
 			}
 		}
 		int size;
@@ -149,8 +214,6 @@ list<JamConf> find_neighbors(JamConf* current) {
 		if (pos + 1 + car_lengths[x] <= size) {
 			v[x] = pos + 1;
 			temp = JamConf(v, current);
-			cout << "=Considering ";
-			temp.display();
 			safe = true;
 			for (int y = 0; y < v.size(); ++y) {
 				if (y != x) {
@@ -158,13 +221,7 @@ list<JamConf> find_neighbors(JamConf* current) {
 				}
 			}
 			if(safe) {
-				cout << "=Accepted ";
-				temp.display();
 				l.push_back(temp);
-			}
-			else {
-				cout << "=Rejected ";
-				temp.display();
 			}
 		}
 		v[x]=pos; //put v[x] back
@@ -173,7 +230,7 @@ list<JamConf> find_neighbors(JamConf* current) {
 	return l;
 }
 
-void display_grid(JamConf* conf) {
+void display_grid(JamConf* conf, ostream& out) {
 	vector<vector<char> > grid = vector<vector<char> >(grid_height, vector<char>(grid_width,' '));
 	vector<int> a = conf->get_values();
 	int r, c;
@@ -194,20 +251,20 @@ void display_grid(JamConf* conf) {
 	for (r = 0; r < grid_height; ++r) {
 		for (c = 0; c < grid_width; ++c) {
 			//grid[r][c] = 'A' + r*grid_width+c;
-			cout << grid[r][c];
+			out << grid[r][c];
 		}
-		cout << endl;
+		out << endl;
 	}
 }
-int print_jam_solution_h(JamConf* c, int depth) {
+int print_jam_solution_h(JamConf* c, ostream& out, int depth) {
 	//cout << "Configuration at " << c << endl;
 	if(!c) return depth;
-	int max_depth = print_jam_solution_h(c->get_prev(), depth + 1);
-	cout << "Step " << max_depth - depth << ":" << endl;
-	display_grid(c);
+	int max_depth = print_jam_solution_h(c->get_prev(), out, depth + 1);
+	out << "Step " << max_depth - depth << ":" << endl;
+	display_grid(c, out);
 	return max_depth;
 }
 
-void print_jam_solution(JamConf* c) {
-	print_jam_solution_h(c, 1);
+void print_jam_solution(JamConf* c, ostream& out) {
+	print_jam_solution_h(c, out, 1);
 }
