@@ -108,7 +108,7 @@ list<WordsConf> find_neighbors(WordsConf* current) {
 	const string& cur_string = current->get_value();
 	list<WordsConf> l;
 	WordsConf temp_conf;
-	for(int c = 0; c < cur_string.size(); c++) {
+	for(unsigned int c = 0; c < cur_string.size(); c++) {
 		string temp = cur_string;
 		for(char ch = MIN_LETTER; ch <= MAX_LETTER; ch++) {
 			temp[c] = ch;

@@ -176,7 +176,7 @@ bool is_goal(const JamConf& c) {
 	}
 }
 
-bool collides(const JamConf& conf, int i1, int i2) {
+bool collides(const JamConf& conf, unsigned int i1, unsigned int i2) {
 	vector<int> v = conf.get_values();
 	if(car_orientation[i1] == car_orientation[i2]) {
 		if(car_slots[i1] != car_slots[i2]) return false;
@@ -198,13 +198,13 @@ list<JamConf> find_neighbors(JamConf* current) {
 	vector<int> v = current->get_values();
 	JamConf temp;
 	bool safe;
-	for(int x = 0; x < v.size(); ++x) {
+	for(unsigned int x = 0; x < v.size(); ++x) {
 		int pos = v[x];
 		if(pos - 1 >= 0) {
 			v[x] = pos - 1;
 			temp = JamConf(v, current);
 			safe = true;
-			for(int y = 0; y < v.size(); ++y) {
+			for(unsigned int y = 0; y < v.size(); ++y) {
 				if(y != x) {
 					if(collides(temp, x, y)) safe = false;
 				}
@@ -224,7 +224,7 @@ list<JamConf> find_neighbors(JamConf* current) {
 			v[x] = pos + 1;
 			temp = JamConf(v, current);
 			safe = true;
-			for(int y = 0; y < v.size(); ++y) {
+			for(unsigned int y = 0; y < v.size(); ++y) {
 				if(y != x) {
 					if(collides(temp, x, y)) safe = false;
 				}
@@ -243,7 +243,7 @@ void display_grid(JamConf* conf, ostream& out) {
 	vector<vector<char> > grid = vector<vector<char> >(grid_height, vector<char>(grid_width, ' '));
 	vector<int> a = conf->get_values();
 	int r, c;
-	for(int i = 0; i < a.size(); i++) {
+	for(unsigned int i = 0; i < a.size(); i++) {
 		if(car_orientation[i] == ORIENTATION_VERTICAL) {
 			c = car_slots[i];
 			for(r = a[i]; r < a[i] + car_lengths[i]; ++r) {

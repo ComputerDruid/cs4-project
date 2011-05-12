@@ -85,7 +85,7 @@ bool is_goal(const WaterConf& c) {
 ///@param current a configuration
 ///@param bucket  a bucket to be filled
 ///@return a neighbor config
-WaterConf fill(WaterConf* current, int bucket) {
+WaterConf fill(WaterConf* current, unsigned int bucket) {
 	std::vector<int> v(current->get_values());
 	v.at(bucket) = SIZES.at(bucket);
 	return WaterConf(v, current);
@@ -95,7 +95,7 @@ WaterConf fill(WaterConf* current, int bucket) {
 ///@param current a configuration
 ///@param bucket  a bucket to be emptied
 ///@return a neighbor config
-WaterConf empty(WaterConf* current, int bucket) {
+WaterConf empty(WaterConf* current, unsigned int bucket) {
 	std::vector<int> v(current->get_values());
 	v.at(bucket) = 0;
 	return WaterConf(v, current);
@@ -106,7 +106,7 @@ WaterConf empty(WaterConf* current, int bucket) {
 ///@param from the bucket to do the pouring
 ///@param to the bucket to be filled
 ///@return a neighbor config
-WaterConf pour_into(WaterConf* current, int from, int to) {
+WaterConf pour_into(WaterConf* current, unsigned int from, unsigned int to) {
 	std::vector<int> v(current->get_values());
 	v.at(to) = v.at(to) + v.at(from);
 	if(v.at(to) > SIZES.at(to)) {
@@ -125,10 +125,10 @@ WaterConf pour_into(WaterConf* current, int from, int to) {
 list<WaterConf> find_neighbors(WaterConf* current) {
 	list<WaterConf> l;
 
-	for(int x = 0; x < SIZES.size(); ++x) {
+	for(unsigned int x = 0; x < SIZES.size(); ++x) {
 		l.push_back(fill(current, x));
 		l.push_back(empty(current, x));
-		for(int y = 0; y < SIZES.size(); ++y) {
+		for(unsigned int y = 0; y < SIZES.size(); ++y) {
 			if(x != y) {
 				l.push_back(pour_into(current, x, y));
 			}
