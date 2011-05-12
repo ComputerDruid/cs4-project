@@ -29,6 +29,7 @@ Configuration& Configuration::operator=(const Configuration& other) {
 	}
 	_prev = other._prev;
 	if(_prev) _prev->add_reference();
+	return *this;
 }
 
 void Configuration::add_reference() {
