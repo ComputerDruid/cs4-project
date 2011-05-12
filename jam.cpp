@@ -180,8 +180,8 @@ bool collides(const JamConf& conf, int i1, int i2) {
 	vector<int> v = conf.get_values();
 	if(car_orientation[i1] == car_orientation[i2]) {
 		if(car_slots[i1] != car_slots[i2]) return false;
-		return ((v.at(i1) >= v.at(i2)) && (v.at(i1) < v.at(i2) + car_lengths[i2]) ||
-		        (v.at(i2) >= v.at(i1)) && (v.at(i2) < v.at(i1) + car_lengths[i1]));
+		return ((v.at(i1) >= v.at(i2)) && (v.at(i1) < v.at(i2) + car_lengths[i2])) ||
+		       ((v.at(i2) >= v.at(i1)) && (v.at(i2) < v.at(i1) + car_lengths[i1]));
 	}
 	else {
 		return ((car_slots[i1] >= v.at(i2)) && (car_slots[i1] < v.at(i2) + car_lengths[i2]) &&
