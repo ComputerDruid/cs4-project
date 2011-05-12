@@ -26,6 +26,8 @@ usage: water goal_value bucket1 ...
 usage: ./jam input output
 use "-" for standard input or output
 
+usage: words starting-word ending-word dict-file
+
 Sample Run:
 -----------
 
@@ -67,6 +69,26 @@ Step 4:
 BBA
   A
  CC
+
+$ words winter spring dict6
+Step 1: winter
+Step 2: winker
+Step 3: pinker
+Step 4: picker
+Step 5: pickee
+Step 6: pickle
+Step 7: peckle
+Step 8: deckle
+Step 9: decile
+Step 10: decide
+Step 11: deride
+Step 12: ceride
+Step 13: cerine
+Step 14: serine
+Step 15: shrine
+Step 16: shrink
+Step 17: sprink
+Step 18: spring
 
 How to make a new puzzle:
 -------------------------
