@@ -45,7 +45,7 @@ Step 10: 3
 Step 11: 2
 Step 12: 1
 
-$ water 5 3 4
+$ water 3 4 5
 Step 1: [0 0]
 Step 2: [4 0]
 Step 3: [0 4]
