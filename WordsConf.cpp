@@ -4,9 +4,9 @@ using std::endl;
 using std::cout;
 
 WordsConf::WordsConf() : _empty(true) {}
-WordsConf::WordsConf(std::string value) : _value(value), _empty(false) {}
-WordsConf::WordsConf(std::string value, WordsConf* prev) : _value(value), _empty(false), Configuration(prev) {}
-WordsConf::WordsConf(const WordsConf& other) : _value(other._value), _empty(false), Configuration(other) {}
+WordsConf::WordsConf(std::string value) : _empty(false), _value(value) {}
+WordsConf::WordsConf(std::string value, WordsConf* prev) : Configuration(prev), _empty(false), _value(value) {}
+WordsConf::WordsConf(const WordsConf& other) : Configuration(other), _empty(false), _value(other._value) {}
 
 WordsConf* WordsConf::get_prev() const {
 	return dynamic_cast<WordsConf*>(Configuration::get_prev());

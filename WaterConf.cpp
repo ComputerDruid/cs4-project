@@ -5,9 +5,9 @@ using std::endl;
 using std::cout;
 
 WaterConf::WaterConf() : _empty(true) {}
-WaterConf::WaterConf(std::vector<int> values) : _values(values), _empty(false) {}
-WaterConf::WaterConf(std::vector<int> values, WaterConf* prev) : _values(values), _empty(false), Configuration(prev) {}
-WaterConf::WaterConf(const WaterConf& other) : _values(other._values), _empty(false), Configuration(other) {}
+WaterConf::WaterConf(std::vector<int> values) : _empty(false), _values(values) {}
+WaterConf::WaterConf(std::vector<int> values, WaterConf* prev) : Configuration(prev), _empty(false), _values(values) {}
+WaterConf::WaterConf(const WaterConf& other) : Configuration(other), _empty(false), _values(other._values) {}
 
 WaterConf* WaterConf::get_prev() const {
 	return dynamic_cast<WaterConf*>(Configuration::get_prev());

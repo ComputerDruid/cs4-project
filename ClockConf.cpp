@@ -4,9 +4,9 @@ using std::endl;
 using std::cout;
 
 ClockConf::ClockConf() : _empty(true) {}
-ClockConf::ClockConf(int value) : _value(value), _empty(false) {}
-ClockConf::ClockConf(int value, ClockConf* prev) : _value(value), Configuration(prev), _empty(false) {}
-ClockConf::ClockConf(const ClockConf& other) : _value(other._value), Configuration(other), _empty(false) {}
+ClockConf::ClockConf(int value) : _empty(false), _value(value) {}
+ClockConf::ClockConf(int value, ClockConf* prev) : Configuration(prev), _empty(false), _value(value) {}
+ClockConf::ClockConf(const ClockConf& other) : Configuration(other), _empty(false), _value(other._value) {}
 
 ClockConf* ClockConf::get_prev() const {
 	return dynamic_cast<ClockConf*>(Configuration::get_prev());

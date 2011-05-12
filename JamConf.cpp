@@ -5,9 +5,9 @@ using std::endl;
 using std::cout;
 
 JamConf::JamConf() : _empty(true) {}
-JamConf::JamConf(std::vector<int> values) : _values(values), _empty(false) {}
-JamConf::JamConf(std::vector<int> values, JamConf* prev) : _values(values), _empty(false), Configuration(prev) {}
-JamConf::JamConf(const JamConf& other) : _values(other._values), _empty(false), Configuration(other) {}
+JamConf::JamConf(std::vector<int> values) : _empty(false), _values(values) {}
+JamConf::JamConf(std::vector<int> values, JamConf* prev) : Configuration(prev), _empty(false), _values(values) {}
+JamConf::JamConf(const JamConf& other) : Configuration(other), _empty(false), _values(other._values) {}
 
 JamConf* JamConf::get_prev() const {
 	return dynamic_cast<JamConf*>(Configuration::get_prev());

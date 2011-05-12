@@ -40,7 +40,7 @@ class ClockConf : public Configuration {
 		bool operator<(const ClockConf& other) const;
 
 	private:
-		int _value;
 		bool _empty;
+		int _value;
 };
 #endif //CLOCKCONF_H
